@@ -36,39 +36,32 @@ class LivreDAO
         return $livres;
     }
 
-    public function selectDetails(int $id) : array
+    public function selectDetails(int $id) : ?Livre
     {
-        $requete = $this->db->query("SELECT * FROM Livre");
-        $livresDB=$requete->fetchAll(\PDO::FETCH_ASSOC);
-        // Mapping relationnel vers objet
-        $livres = [];
-        foreach ($livresDB as $livreDB) {
-            if ($livreDB["id_livre"]==$id) {
-                $livre = new Livre();  // Constructeur par défaut
-                $livre->setId($livreDB["id_livre"]);
-                $livre->setTitre($livreDB["titre_livre"]);
-                $livre->setAuteur($livreDB["auteur_livre"]);
-                $livre->setNbPages($livreDB["nombre_pages_livre"]);
-                $livres[]=$livre;
-
-            }
+        $stmt = $this->db->query("SELECT * FROM Livre WHERE id_livre = $id");
+        $livreDB = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$livreDB) {
+            return null;
         }
-        return $livres;
+        $livre = new Livre();  // Constructeur par défaut
+        $livre->setId($livreDB["id_livre"]);
+        $livre->setTitre($livreDB["titre_livre"]);
+        $livre->setAuteur($livreDB["auteur_livre"]);
+        $livre->setNbPages($livreDB["nombre_pages_livre"]);
+        return $livre;
     }
 
-//    public function selectDetails(int $id) : array
-//    {
-//        $requete = $this->db->query("SELECT * FROM Livre WHERE 'id_livre'=$id");
-//        $livreDB=$requete->fetchAll(\PDO::FETCH_ASSOC);
-//        // Mapping relationnel vers objet
-//        $livreDetails = [];
-//        $livre = new Livre();  // Constructeur par défaut
-//        $livre->setId($livreDB[0]["id_livre"]);
-//        $livre->setTitre($livreDB[0]["titre_livre"]);
-//        $livre->setAuteur($livreDB[0]["auteur_livre"]);
-//        $livre->setNbPages($livreDB[0]["nombre_pages_livre"]);
-//        $livreDetails[]=$livre;
-//
-//        return $livreDetails;
-//    }
+    public function postFilm($livreAjouter): void
+    {
+        $titre=$livreAjouter->getTitre();
+        $nbPages=$livreAjouter->getNbPages();
+        $auteur=$livreAjouter->getAuteur();
+        $requete = $this->db->prepare('INSERT INTO livre (titre_livre,nombre_pages_livre,auteur_livre) VALUES (?,?,?)');
+        $requete->bindParam(1,$titre);
+        $requete->bindParam(2, $nbPages);
+        $requete->bindParam(3, $auteur);
+        $requete->execute();
+    }
+
+
 }

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Dao\LivreDAO;
+use App\Entity\Livre;
 
 class LivreController
 {
@@ -22,18 +23,20 @@ class LivreController
         // Fait appel à la vue afin de renvoyer la page
         require __DIR__ . '/../../views/livre/list.php';
     }
-    public function details() {
-        $id = null;
-        if (isset($_GET["idlivre"])) {
-            $id = filter_var($_GET["idlivre"], FILTER_VALIDATE_INT);
+
+    public function details(int $id) {
+        $livre = $this->livreDao->selectDetails($id);
+        if ($livre) {
+            require __DIR__.'/../../views/livre/details.php';
+        } else {
+            echo "Livre non trouvé";
         }
-        if ($id) {
-            if ($this->livreDao->selectDetails($id)) {
-                $livres = $this->livreDao->selectDetails($id);
-                // Fait appel à la vue afin de renvoyer la page
-                require __DIR__ . '/../../views/livre/details.php';
-            }
-        }
+    }
+
+    public function ajouter() {
+        require __DIR__.'/../../views/livre/ajouter.php';
+        $this->livreDao->postFilm($ajoutLivre);
+
     }
 
 }

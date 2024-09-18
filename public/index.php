@@ -28,22 +28,21 @@ switch ($route) {
         $livreController->list();
         break;
     case "details-livre" :
-        $id = null;
-        if (isset($_GET["idlivre"])) {
-            $id = filter_var($_GET["idlivre"], FILTER_VALIDATE_INT);
-        }
-        if (!$id) {
+        $id = $_GET["idlivre"] ?? null;
+        if ($id) {
+            $livreDao = new \App\Dao\LivreDAO($db);
+            // Injecter la dépendance $livreDao dans l'objet LivreController
+            $livreController = new \App\Controllers\LivreController($livreDao);
+            $livreController->details($id);
+        } else {
             echo "Livre introuvable";
             break;
         }
+        break;
+    case "ajouter-livre" :
         $livreDao = new \App\Dao\LivreDAO($db);
-        // Injecter la dépendance $livreDao dans l'objet LivreController
-        $livreController = new \App\Controllers\LivreController($livreDao);
-        $livreController->details();
-        if (isset($livreController)) {
-            echo "Livre introuvable";
-            break;
-        }
+        $livreAjouter = new \App\Controllers\LivreController($livreDao);
+        $livreAjouter->ajouter();
         break;
     default :
         // Erreur 404

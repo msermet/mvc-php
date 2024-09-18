@@ -10,12 +10,10 @@
 <body>
 <h1>Détails du livre : </h1>
 <ul>
-    <?php foreach ($livres as $livre): ?>
-        <li><?= $livre->getId() ?></li>
-        <li><?= $livre->getTitre() ?></li>
-        <li><?= $livre->getNbPages() ?></li>
-        <li><?= $livre->getAuteur() ?></li>
-    <?php endforeach; ?>
+    <li><?= $livre->getId() ?></li>
+    <li><?= $livre->getTitre() ?></li>
+    <li><?= $livre->getNbPages() ?></li>
+    <li><?= $livre->getAuteur() ?></li>
 </ul>
 <a href="index.php?route=livre-list">Liste des livres</a>
 </body>

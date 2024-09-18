@@ -13,6 +13,7 @@
     <?php foreach ($livres as $livre): ?>
         <li><?= $livre->getTitre() ?><a href="index.php?route=details-livre&idlivre=<?= $livre->getId() ?>"> Détails</a></li>
     <?php endforeach; ?>
+        <li><a href="index.php?route=ajouter-livre"> Ajouter un livre</a></li>
     </ul>
     <a href="index.php">Accueil</a>
 </body>
